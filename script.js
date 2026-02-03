@@ -47,7 +47,7 @@ for (let i = 0; i < 260; i++) {
     });
 }
 
-for (let i = 0; i < 12; i++) {
+for (let i = 0; i < 8; i++) {
     shootingStars.push({
         x: rand(W * 0.2, W * 0.9),
         y: rand(0, H * 0.3),
