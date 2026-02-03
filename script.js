@@ -1,7 +1,3 @@
-<canvas id="canvas"></canvas>
-<audio id="bgm" src="bgm.mp3" loop></audio>
-
-<script>
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 const bgm = document.getElementById('bgm');
@@ -259,4 +255,3 @@ animate();
 window.addEventListener('click', () => {
     if (bgm.paused) bgm.play();
 });
-</script>
