@@ -165,7 +165,7 @@ function animate() {
     });
     ctx.restore();
 
-    ctx.restore(); // ⭐ 여기서 하늘 레이어 끝
+    ctx.restore();
 
     /* ---- 달 (고정) ---- */
     drawMoon();
