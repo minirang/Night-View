@@ -35,7 +35,6 @@ const trees = [];
 const hill = [];
 
 let skyOffsetX = 0;
-let moonAngle = -0.45;
 let moonPhase = 0;
 
 for (let i = 0; i < 260; i++) {
@@ -108,12 +107,8 @@ function drawMilkyWay(strength) {
 }
 
 function drawMoon() {
-    const orbitRadius = Math.max(W, H) * 1.2;
-    const centerX = W * 0.5;
-    const centerY = H * 0.8;
-
-    const x = centerX + orbitRadius * Math.cos(moonAngle);
-    const y = centerY + orbitRadius * Math.sin(moonAngle);
+    const x = W * 0.78;
+    const y = H * 0.25;
     const r = Math.min(W, H) * 0.07;
 
     const glow = ctx.createRadialGradient(x, y, r * 0.2, x, y, r * 2);
@@ -143,10 +138,9 @@ function animate() {
     ctx.clearRect(0, 0, W, H);
 
     skyOffsetX += 0.012;
-    moonAngle += 0.00003;
     moonPhase += 0.00006;
 
-    /* ---- 하늘 레이어 ---- */
+    /* ---- 하늘 ---- */
     ctx.save();
     ctx.translate(-skyOffsetX, 0);
 
