@@ -142,7 +142,7 @@ function drawMoon() {
 function animate() {
     ctx.clearRect(0, 0, W, H);
 
-    skyOffsetX += 0.012;          // ⭐ 지구 자전 느낌
+    skyOffsetX += 0.012;
     moonAngle += 0.00003;
     moonPhase += 0.00006;
 
