@@ -140,7 +140,7 @@ function animate() {
     skyOffsetX += 0.012;
     moonPhase += 0.00006;
 
-    /* ---- 하늘 ---- */
+    /* ---- 하늘 (움직임) ---- */
     ctx.save();
     ctx.translate(-skyOffsetX, 0);
 
@@ -165,8 +165,10 @@ function animate() {
     });
     ctx.restore();
 
+    ctx.restore(); // ⭐ 여기서 하늘 레이어 끝
+
+    /* ---- 달 (고정) ---- */
     drawMoon();
-    ctx.restore();
 
     /* ---- 유성 ---- */
     shootingStars.forEach(sh => {
