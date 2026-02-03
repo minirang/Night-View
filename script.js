@@ -109,8 +109,8 @@ function drawMilkyWay(strength) {
 
 function drawMoon() {
     const orbitRadius = Math.max(W, H) * 1.2;
-    const centerX = W * 0.3;
-    const centerY = H * 1.2;
+    const centerX = W * 0.5;
+    const centerY = H * 0.8;
 
     const x = centerX + orbitRadius * Math.cos(moonAngle);
     const y = centerY + orbitRadius * Math.sin(moonAngle);
