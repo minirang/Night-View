@@ -27,11 +27,16 @@ function rand(min, max) {
     return Math.random() * (max - min) + min;
 }
 
+/* ================= 데이터 ================= */
+
 const stars = [];
 const shootingStars = [];
 const trees = [];
 const hill = [];
-let scrollY = 0;
+
+let skyOffsetX = 0;
+let moonAngle = -0.45;
+let moonPhase = 0;
 
 for (let i = 0; i < 260; i++) {
     stars.push({
@@ -85,11 +90,30 @@ for (let i = 0; i < 7; i++) {
     });
 }
 
-let moonPhase = 0;
+/* ================= 그리기 ================= */
+
+function drawMilkyWay(strength) {
+    const grad = ctx.createLinearGradient(0, H * 0.1, 0, H * 0.7);
+    grad.addColorStop(0, 'rgba(255,210,255,0)');
+    grad.addColorStop(0.5, `rgba(255,210,255,${0.25 * strength})`);
+    grad.addColorStop(1, 'rgba(255,210,255,0)');
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    ctx.translate(W * 0.15, H * 0.2);
+    ctx.rotate(-0.25);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W * 0.8, H * 0.6);
+    ctx.restore();
+}
 
 function drawMoon() {
-    const x = W * 0.78;
-    const y = H * 0.25;
+    const orbitRadius = Math.max(W, H) * 1.2;
+    const centerX = W * 0.3;
+    const centerY = H * 1.2;
+
+    const x = centerX + orbitRadius * Math.cos(moonAngle);
+    const y = centerY + orbitRadius * Math.sin(moonAngle);
     const r = Math.min(W, H) * 0.07;
 
     const glow = ctx.createRadialGradient(x, y, r * 0.2, x, y, r * 2);
@@ -113,26 +137,18 @@ function drawMoon() {
     ctx.fill();
 }
 
-function drawMilkyWay(strength) {
-    const grad = ctx.createLinearGradient(0, H * 0.1, 0, H * 0.7);
-    grad.addColorStop(0, 'rgba(255,210,255,0)');
-    grad.addColorStop(0.5, `rgba(255,210,255,${0.25 * strength})`);
-    grad.addColorStop(1, 'rgba(255,210,255,0)');
-
-    ctx.save();
-    ctx.globalCompositeOperation = 'screen';
-    ctx.translate(W * 0.15, H * 0.2);
-    ctx.rotate(-0.25);
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, W * 0.8, H * 0.6);
-    ctx.restore();
-}
-
-let t = 0;
+/* ================= 애니메이션 ================= */
 
 function animate() {
-    t += 0.01;
     ctx.clearRect(0, 0, W, H);
+
+    skyOffsetX += 0.012;          // ⭐ 지구 자전 느낌
+    moonAngle += 0.00003;
+    moonPhase += 0.00006;
+
+    /* ---- 하늘 레이어 ---- */
+    ctx.save();
+    ctx.translate(-skyOffsetX, 0);
 
     const sky = ctx.createLinearGradient(0, 0, 0, H);
     sky.addColorStop(0, 'rgb(255,178,240)');
@@ -140,7 +156,7 @@ function animate() {
     sky.addColorStop(0.7, 'rgb(43,10,74)');
     sky.addColorStop(1, 'rgb(5,1,10)');
     ctx.fillStyle = sky;
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(skyOffsetX, 0, W, H);
 
     drawMilkyWay(0.9);
 
@@ -150,14 +166,15 @@ function animate() {
         s.tw += s.twSpeed;
         ctx.fillStyle = `rgba(255,255,255,${0.35 + Math.sin(s.tw) * 0.6})`;
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.arc(s.x + skyOffsetX * 0.3, s.y, s.r, 0, Math.PI * 2);
         ctx.fill();
     });
     ctx.restore();
 
-    moonPhase += 0.00006;
     drawMoon();
+    ctx.restore();
 
+    /* ---- 유성 ---- */
     shootingStars.forEach(sh => {
         if (sh.delay > 0) {
             sh.delay--;
@@ -181,6 +198,7 @@ function animate() {
         }
     });
 
+    /* ---- 지형 ---- */
     ctx.fillStyle = 'rgb(10,6,25)';
     ctx.beginPath();
     ctx.moveTo(0, H);
