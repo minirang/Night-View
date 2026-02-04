@@ -161,8 +161,8 @@ function animate() {
 
     const screenX = s.x + skyOffsetX * 0.3;
 
-    if (screenX < -50) {
-        s.x += W + rand(50, 200); // 오른쪽 바깥에서 다시 등장
+    if (s.x + skyOffsetX * 0.3 < -100) {
+        s.x += W + rand(200, 400);
         s.y = rand(0, H * 0.75);
         s.r = rand(0.5, 1.8);
         s.tw = rand(0.3, 1);
