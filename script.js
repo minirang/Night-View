@@ -34,23 +34,17 @@ const shootingStars = [];
 const trees = [];
 const hill = [];
 
-const MAX_STARS = 260;
-
 let skyOffsetX = 0;
 let moonPhase = 0;
 
-function createStar(x = rand(0, W)) {
-    return {
-        x,
+for (let i = 0; i < 260; i++) {
+    stars.push({
+        x: rand(0, W),
         y: rand(0, H * 0.75),
         r: rand(0.5, 1.8),
         tw: rand(0.3, 1),
         twSpeed: rand(0.002, 0.008)
-    };
-}
-
-for (let i = 0; i < MAX_STARS; i++) {
-    stars.push(createStar());
+    });
 }
 
 for (let i = 0; i < 8; i++) {
@@ -146,7 +140,7 @@ function animate() {
     skyOffsetX += 0.012;
     moonPhase += 0.00006;
 
-    /* ---- 하늘 ---- */
+    /* ---- 하늘 (움직임) ---- */
     ctx.save();
     ctx.translate(-skyOffsetX, 0);
 
@@ -160,35 +154,31 @@ function animate() {
 
     drawMilkyWay(0.9);
 
-    /* ---- 별 ---- */
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
+    stars.forEach(s => {
+    s.tw += s.twSpeed;
 
-    for (let i = stars.length - 1; i >= 0; i--) {
-        const s = stars[i];
-        s.tw += s.twSpeed;
+    const screenX = s.x + skyOffsetX * 0.3;
 
-        const screenX = s.x + skyOffsetX * 0.3;
-
-        if (screenX < -100) {
-            stars.splice(i, 1);
-            continue;
-        }
-
-        ctx.fillStyle = `rgba(255,255,255,${0.35 + Math.sin(s.tw) * 0.6})`;
-        ctx.beginPath();
-        ctx.arc(screenX, s.y, s.r, 0, Math.PI * 2);
-        ctx.fill();
+    if (screenX < -50) {
+        s.x += W + rand(50, 200); // 오른쪽 바깥에서 다시 등장
+        s.y = rand(0, H * 0.75);
+        s.r = rand(0.5, 1.8);
+        s.tw = rand(0.3, 1);
+        s.twSpeed = rand(0.002, 0.008);
     }
 
-    ctx.restore();
+    ctx.fillStyle = `rgba(255,255,255,${0.35 + Math.sin(s.tw) * 0.6})`;
+    ctx.beginPath();
+    ctx.arc(screenX, s.y, s.r, 0, Math.PI * 2);
+    ctx.fill();
+});
     ctx.restore();
 
-    while (stars.length < MAX_STARS) {
-        stars.push(createStar(rand(W * 0.6, W + 300)));
-    }
+    ctx.restore();
 
-    /* ---- 달 ---- */
+    /* ---- 달 (고정) ---- */
     drawMoon();
 
     /* ---- 유성 ---- */
