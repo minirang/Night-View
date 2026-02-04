@@ -187,7 +187,7 @@ function animate() {
     ctx.restore();
 
     while (stars.length < MAX_STARS) {
-        stars.push(createStar(W + rand(50, 300)));
+        stars.push(createStar(rand(W * 0.6, W + 300)));
     }
 
     /* ---- 달 ---- */
