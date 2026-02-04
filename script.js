@@ -167,8 +167,6 @@ function animate() {
     for (let i = stars.length - 1; i >= 0; i--) {
         const s = stars[i];
         s.tw += s.twSpeed;
-    
-        s.x -= 0.15;
 
         const screenX = s.x + skyOffsetX * 0.3;
 
