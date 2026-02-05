@@ -36,7 +36,7 @@ const hill = [];
 
 let moonPhase = 0;
 
-for (let i = 0; i < 260; i++) {
+for (let i = 0; i < 280; i++) {
     stars.push({
         x: rand(0, W),
         y: rand(0, H * 0.75),
@@ -46,7 +46,7 @@ for (let i = 0; i < 260; i++) {
     });
 }
 
-for (let i = 0; i < 8; i++) {
+for (let i = 0; i < 6; i++) {
     shootingStars.push({
         x: rand(W * 0.2, W * 0.9),
         y: rand(0, H * 0.3),
@@ -140,8 +140,8 @@ function animate() {
 
     /* ---- 하늘 (고정) ---- */
     const sky = ctx.createLinearGradient(0, 0, 0, H);
-    sky.addColorStop(0, 'rgb(255,178,240)');
-    sky.addColorStop(0.35, 'rgb(154,75,255)');
+    sky.addColorStop(0, 'rgb(207, 129, 192)');
+    sky.addColorStop(0.35, 'rgb(142, 67, 240)');
     sky.addColorStop(0.7, 'rgb(43,10,74)');
     sky.addColorStop(1, 'rgb(5,1,10)');
     ctx.fillStyle = sky;
@@ -153,7 +153,7 @@ function animate() {
     ctx.globalCompositeOperation = 'screen';
     stars.forEach(s => {
         s.tw += s.twSpeed;
-        ctx.fillStyle = `rgba(255,255,255,${0.35 + Math.sin(s.tw) * 0.6})`;
+        ctx.fillStyle = `rgba(255,255,255,${Math.max(0, 0.35 + Math.sin(s.tw) * 0.3)})`;
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
         ctx.fill();
@@ -174,10 +174,14 @@ function animate() {
         sh.trail.push({ x: sh.x, y: sh.y });
         if (sh.trail.length > 20) sh.trail.shift();
 
+        ctx.save();
         ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+        ctx.shadowColor = 'white';
+        ctx.shadowBlur = 5;
         ctx.beginPath();
         sh.trail.forEach(p => ctx.lineTo(p.x, p.y));
         ctx.stroke();
+        ctx.restore();
 
         if (sh.x < -200 || sh.y > H + 200) {
             sh.x = rand(W * 0.2, W * 0.9);
