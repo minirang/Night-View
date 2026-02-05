@@ -159,16 +159,15 @@ function animate() {
     stars.forEach(s => {
     s.tw += s.twSpeed;
 
-    const screenX = s.x + skyOffsetX * 0.3;
+    const screenX = s.x - skyOffsetX * 0.3;
 
     if (screenX < -50) {
-        s.x += W + rand(50, 200); // 오른쪽 바깥에서 다시 등장
+        s.x = W + rand(50, 250);
         s.y = rand(0, H * 0.75);
         s.r = rand(0.5, 1.8);
         s.tw = rand(0.3, 1);
         s.twSpeed = rand(0.002, 0.008);
     }
-
     ctx.fillStyle = `rgba(255,255,255,${0.35 + Math.sin(s.tw) * 0.6})`;
     ctx.beginPath();
     ctx.arc(screenX, s.y, s.r, 0, Math.PI * 2);
