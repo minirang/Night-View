@@ -147,7 +147,7 @@ function animate() {
     ctx.fillStyle = sky;
     ctx.fillRect(0, 0, W, H);
 
-    drawMilkyWay();
+    drawMilkyWay(0.9);
 
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
