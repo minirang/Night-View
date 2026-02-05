@@ -36,7 +36,7 @@ const hill = [];
 
 let moonPhase = 0;
 
-for (let i = 0; i < 280; i++) {
+for (let i = 0; i < 270; i++) {
     stars.push({
         x: rand(0, W),
         y: rand(0, H * 0.75),
