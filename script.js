@@ -34,7 +34,6 @@ const shootingStars = [];
 const trees = [];
 const hill = [];
 
-let skyOffsetX = 0;
 let moonPhase = 0;
 
 for (let i = 0; i < 260; i++) {
@@ -137,44 +136,28 @@ function drawMoon() {
 function animate() {
     ctx.clearRect(0, 0, W, H);
 
-    skyOffsetX += 0.012;
-    moonPhase += 0.00006;
+    moonPhase = (moonPhase + 0.00006) % 2;
 
-    /* ---- 하늘 (움직임) ---- */
-    ctx.save();
-    ctx.translate(-skyOffsetX, 0);
-
+    /* ---- 하늘 (고정) ---- */
     const sky = ctx.createLinearGradient(0, 0, 0, H);
     sky.addColorStop(0, 'rgb(255,178,240)');
     sky.addColorStop(0.35, 'rgb(154,75,255)');
     sky.addColorStop(0.7, 'rgb(43,10,74)');
     sky.addColorStop(1, 'rgb(5,1,10)');
     ctx.fillStyle = sky;
-    ctx.fillRect(skyOffsetX, 0, W, H);
+    ctx.fillRect(0, 0, W, H);
 
-    drawMilkyWay(0.9);
+    drawMilkyWay();
 
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
     stars.forEach(s => {
-    s.tw += s.twSpeed;
-
-    const screenX = s.x - skyOffsetX * 0.3;
-
-    if (screenX < -50) {
-        s.x = W + rand(50, 250);
-        s.y = rand(0, H * 0.75);
-        s.r = rand(0.5, 1.8);
-        s.tw = rand(0.3, 1);
-        s.twSpeed = rand(0.002, 0.008);
-    }
-    ctx.fillStyle = `rgba(255,255,255,${0.35 + Math.sin(s.tw) * 0.6})`;
-    ctx.beginPath();
-    ctx.arc(screenX, s.y, s.r, 0, Math.PI * 2);
-    ctx.fill();
-});
-    ctx.restore();
-
+        s.tw += s.twSpeed;
+        ctx.fillStyle = `rgba(255,255,255,${0.35 + Math.sin(s.tw) * 0.6})`;
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fill();
+    });
     ctx.restore();
 
     /* ---- 달 (고정) ---- */
